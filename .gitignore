@@ -1,0 +1,50 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# API keys / secrets — see .env.example for the required variables
+.env
+.env.*
+!.env.example
+
+# Editor/tooling directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.claude
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Android (Capacitor native platform) — build output and machine-specific files.
+# The rest of android/ (source, gradle scripts, manifest, res/) is committed.
+android/build
+android/app/build
+android/.gradle
+android/local.properties
+android/captures
+android/app/src/main/assets/public
+android/app/src/main/assets/capacitor.config.json
+android/app/src/main/assets/capacitor.plugins.json
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# Ad-hoc screenshots dropped in the project root during device-testing sessions
+/*.png
+/*.jpg
+/*.jpeg
