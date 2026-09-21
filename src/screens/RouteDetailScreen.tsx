@@ -4,7 +4,7 @@ import { RoutePlayer, type RoutePlayerState } from '../services/map/route-player
 import type { LatLng, MapProvider, MapProviderKey } from '../services/map/map-provider.interface';
 import { getMapProvider } from '../services/settings/settings.service';
 import * as db from '../services/db/db.service';
-import type { Route, TrackPoint } from '../services/db/types';
+import type { PlaceInfo, Route, TrackPoint } from '../services/db/types';
 import { formatDurationClock } from '../utils/datetime';
 import { formatDistanceKm } from '../utils/geo';
 
@@ -31,6 +31,7 @@ export function RouteDetailScreen({ routeId, onClose }: RouteDetailScreenProps) 
   const [map, setMap] = useState<MapProvider | null>(null);
   const [points, setPoints] = useState<LatLng[] | null>(null);
   const [route, setRoute] = useState<Route | null>(null);
+  const [photos, setPhotos] = useState<PlaceInfo[]>([]);
   const [state, setState] = useState<RoutePlayerState>({ index: 0, total: 0, playing: false });
   const [stepMs, setStepMs] = useState(200);
 
@@ -42,19 +43,24 @@ export function RouteDetailScreen({ routeId, onClose }: RouteDetailScreenProps) 
   useEffect(() => {
     (async () => {
       setProvider(await getMapProvider());
-      const [loaded, routeRow] = await Promise.all([db.getRoutePoints(routeId), db.getRoute(routeId)]);
+      const [loaded, routeRow, routePhotos] = await Promise.all([
+        db.getRoutePoints(routeId),
+        db.getRoute(routeId),
+        db.listRoutePhotos(routeId),
+      ]);
       const latLngs = loaded.map(toLatLng);
       setPoints(latLngs);
       setRoute(routeRow);
+      setPhotos(routePhotos);
       playerRef.current?.setPoints(latLngs);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [routeId]);
 
-  // Runs whenever the map becomes ready AND/OR the points finish loading,
-  // regardless of which happens first — moves the camera to the route's
-  // actual location and marks its start/end, instead of leaving the map
-  // sitting on its initial placeholder center.
+  // Runs whenever the map becomes ready AND/OR the points/photos finish
+  // loading, regardless of which happens first — moves the camera to the
+  // route's actual location and marks its start/end/photo locations, instead
+  // of leaving the map sitting on its initial placeholder center.
   //
   // fitBounds (not setCenter+fixed zoom) is required here: centering on just
   // the start point at a fixed zoom crops out the rest of any route longer
@@ -66,7 +72,10 @@ export function RouteDetailScreen({ routeId, onClose }: RouteDetailScreenProps) 
     map.clearMarkers();
     map.addMarker(points[0], { title: '출발', color: '#2563EB' });
     if (points.length > 1) map.addMarker(points[points.length - 1], { title: '도착', color: '#DC2626' });
-  }, [map, points]);
+    for (const photo of photos) {
+      map.addMarker({ lat: photo.lat, lng: photo.lng }, { title: photo.title, color: '#7C3AED', icon: 'camera' });
+    }
+  }, [map, points, photos]);
 
   function handleMapReady(m: MapProvider) {
     playerRef.current?.setMap(m);

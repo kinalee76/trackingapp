@@ -35,8 +35,12 @@ export interface MapProvider {
   drawRoute(points: LatLng[]): void;
   /** Moves/zooms the camera so every point in `points` is visible at once. No-op for fewer than 1 point. */
   fitBounds(points: LatLng[]): void;
-  /** `color` (any CSS color) renders a filled pin in that color; omitted falls back to each provider's default marker. */
-  addMarker(position: LatLng, options?: { title?: string; color?: string }): void;
+  /**
+   * `color` (any CSS color) renders a filled pin in that color; omitted falls
+   * back to each provider's default marker. `icon: 'camera'` draws a camera
+   * glyph inside the pin instead of a plain dot (used for photo locations).
+   */
+  addMarker(position: LatLng, options?: { title?: string; color?: string; icon?: 'pin' | 'camera' }): void;
   clearMarkers(): void;
   /** Creates (once) or moves the single "current location" marker. */
   setCurrentLocationMarker(position: LatLng): void;

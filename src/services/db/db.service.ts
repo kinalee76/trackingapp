@@ -250,6 +250,15 @@ export async function getPlaceInfo(id: number): Promise<PlaceInfo | null> {
   return row ? rowToPlaceInfo(row) : null;
 }
 
+/** Photos taken while tracking a specific route, for plotting camera markers on its route detail map. */
+export async function listRoutePhotos(routeId: number): Promise<PlaceInfo[]> {
+  const res = await requireDb().query(
+    "SELECT * FROM place_info WHERE route_id = ? AND source = 'photo' ORDER BY recorded_at ASC",
+    [routeId],
+  );
+  return (res.values ?? []).map(rowToPlaceInfo);
+}
+
 /** Finds an existing place_info of the given source within `radiusMeters` of (lat, lng), for dedupe checks. */
 export async function findNearbyPlaceInfo(
   source: string,

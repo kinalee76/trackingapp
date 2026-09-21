@@ -79,6 +79,9 @@ MapProvider.setCurrentLocationMarker() — 지도에 "현재 위치" 마커 갱�
 7. **[치명적]** `@capacitor-community/sqlite`의 Android 마이그레이션 `statements` 배열에 세미콜론으로 연결된 멀티스테이트먼트 문자열을 통째로 넣으면, 안드로이드의 `execSQL()`이 첫 문장만 실행하고 나머지를 조용히 버림 — `track_points`/`visits`/`photos`/`memos` 테이블이 기기에 한 번도 생성되지 않았던 원인. 배열 원소를 SQL 문 하나당 하나로 재작성하고, 기존에 손상된 기기를 복구하는 자가 치유 마이그레이션(`SCHEMA_V3`, `IF NOT EXISTS`로 안전)을 추가해 해결.
 8. `RouteDetailScreen`에서 지도(`MapProvider`)와 포인트 로딩이 서로 다른 시점에 준비되면 지도가 초기 기본 좌표에 머무르던 문제 — 둘 다 `useState`로 관리하고 `useEffect([map, points])`로 통합해 해결.
 
+**Phase 16** (자세히: [reports/16-route-photo-markers.md](./reports/16-route-photo-markers.md)):
+- 경로 상세 화면이 `track_points`/`routes`만 조회하고 같은 route_id의 `place_info`(사진)는 조회하지 않아, 추적 중 촬영한 사진 위치가 지도에 전혀 표시되지 않던 문제 — `db.listRoutePhotos(routeId)`를 추가해 조회하고, 보라색 카메라 아이콘 마커(`marker-icon.ts`의 `cameraPinIconHtml`/`cameraPinIconDataUri`, `MapProvider.addMarker`의 `icon: 'camera'` 옵션)로 표시.
+
 **Phase 14** (자세히: [reports/14-white-screen-crash.md](./reports/14-white-screen-crash.md)):
 - 지도 API 키 인증이 실패한 상태에서 지도 화면을 떠날 때(`MapProvider.destroy()`가 Naver SDK의 마커에 `.setMap(null)` 호출) SDK 내부에서 예외가 발생, React의 언마운트 커밋 단계로 전파되어 앱 전체가 빈 화면으로 죽는 크래시 — 세 지도 어댑터의 SDK 호출을 try/catch(`safeCall`)로 감싸 근본 원인을 제거하고, `src/ErrorBoundary.tsx`로 앱 전체에 방어선을 추가.
 

@@ -3,7 +3,7 @@ import { MapProviderKeyMissingError } from '../map-provider.interface';
 import { MAP_API_KEYS } from '../map-config';
 import { loadScriptOnce } from '../script-loader';
 import { runPlayback } from '../playback';
-import { pinIconDataUri, PIN_SIZE, PIN_ANCHOR } from '../marker-icon';
+import { pinIconDataUri, cameraPinIconDataUri, PIN_SIZE, PIN_ANCHOR } from '../marker-icon';
 
 declare global {
   interface Window {
@@ -65,7 +65,7 @@ export class GoogleMapProvider implements MapProvider {
     });
   }
 
-  addMarker(position: LatLng, options?: { title?: string; color?: string }): void {
+  addMarker(position: LatLng, options?: { title?: string; color?: string; icon?: 'pin' | 'camera' }): void {
     if (!this.map) return;
     const google = window.google;
     this.markers.push(
@@ -75,7 +75,7 @@ export class GoogleMapProvider implements MapProvider {
         title: options?.title,
         icon: options?.color
           ? {
-              url: pinIconDataUri(options.color),
+              url: options.icon === 'camera' ? cameraPinIconDataUri(options.color) : pinIconDataUri(options.color),
               scaledSize: new google.maps.Size(PIN_SIZE.width, PIN_SIZE.height),
               anchor: new google.maps.Point(PIN_ANCHOR.x, PIN_ANCHOR.y),
             }

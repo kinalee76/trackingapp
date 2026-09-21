@@ -3,7 +3,7 @@ import { MapProviderKeyMissingError } from '../map-provider.interface';
 import { MAP_API_KEYS } from '../map-config';
 import { loadScriptOnce } from '../script-loader';
 import { runPlayback } from '../playback';
-import { pinIconHtml, PIN_SIZE, PIN_ANCHOR } from '../marker-icon';
+import { pinIconHtml, cameraPinIconHtml, PIN_SIZE, PIN_ANCHOR } from '../marker-icon';
 
 declare global {
   interface Window {
@@ -63,7 +63,7 @@ export class NaverMapProvider implements MapProvider {
     });
   }
 
-  addMarker(position: LatLng, options?: { title?: string; color?: string }): void {
+  addMarker(position: LatLng, options?: { title?: string; color?: string; icon?: 'pin' | 'camera' }): void {
     if (!this.map) return;
     const naver = window.naver;
     this.markers.push(
@@ -73,7 +73,7 @@ export class NaverMapProvider implements MapProvider {
         title: options?.title,
         icon: options?.color
           ? {
-              content: pinIconHtml(options.color),
+              content: options.icon === 'camera' ? cameraPinIconHtml(options.color) : pinIconHtml(options.color),
               size: new naver.maps.Size(PIN_SIZE.width, PIN_SIZE.height),
               anchor: new naver.maps.Point(PIN_ANCHOR.x, PIN_ANCHOR.y),
             }

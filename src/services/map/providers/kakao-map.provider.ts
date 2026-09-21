@@ -3,7 +3,7 @@ import { MapProviderKeyMissingError } from '../map-provider.interface';
 import { MAP_API_KEYS } from '../map-config';
 import { loadScriptOnce } from '../script-loader';
 import { runPlayback } from '../playback';
-import { pinIconDataUri, PIN_SIZE, PIN_ANCHOR } from '../marker-icon';
+import { pinIconDataUri, cameraPinIconDataUri, PIN_SIZE, PIN_ANCHOR } from '../marker-icon';
 
 declare global {
   interface Window {
@@ -67,7 +67,7 @@ export class KakaoMapProvider implements MapProvider {
     });
   }
 
-  addMarker(position: LatLng, options?: { title?: string; color?: string }): void {
+  addMarker(position: LatLng, options?: { title?: string; color?: string; icon?: 'pin' | 'camera' }): void {
     if (!this.map) return;
     const kakao = window.kakao;
     const marker = new kakao.maps.Marker({
@@ -75,7 +75,7 @@ export class KakaoMapProvider implements MapProvider {
       map: this.map,
       image: options?.color
         ? new kakao.maps.MarkerImage(
-            pinIconDataUri(options.color),
+            options.icon === 'camera' ? cameraPinIconDataUri(options.color) : pinIconDataUri(options.color),
             new kakao.maps.Size(PIN_SIZE.width, PIN_SIZE.height),
             { offset: new kakao.maps.Point(PIN_ANCHOR.x, PIN_ANCHOR.y) },
           )
