@@ -3,7 +3,7 @@ import { MapProviderKeyMissingError } from '../map-provider.interface';
 import { MAP_API_KEYS } from '../map-config';
 import { loadScriptOnce } from '../script-loader';
 import { runPlayback } from '../playback';
-import { pinIconHtml, cameraPinIconHtml, PIN_SIZE, PIN_ANCHOR } from '../marker-icon';
+import { pinIconHtml, cameraPinIconHtml, runningDogIconHtml, PIN_SIZE, PIN_ANCHOR, DOG_SIZE, DOG_ANCHOR } from '../marker-icon';
 
 declare global {
   interface Window {
@@ -127,6 +127,11 @@ export class NaverMapProvider implements MapProvider {
       this.playbackMarker = new naver.maps.Marker({
         position: new naver.maps.LatLng(points[0].lat, points[0].lng),
         map: this.map,
+        icon: {
+          content: runningDogIconHtml(),
+          size: new naver.maps.Size(DOG_SIZE.width, DOG_SIZE.height),
+          anchor: new naver.maps.Point(DOG_ANCHOR.x, DOG_ANCHOR.y),
+        },
       });
     }
     return runPlayback(

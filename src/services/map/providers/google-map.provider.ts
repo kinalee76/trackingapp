@@ -3,7 +3,7 @@ import { MapProviderKeyMissingError } from '../map-provider.interface';
 import { MAP_API_KEYS } from '../map-config';
 import { loadScriptOnce } from '../script-loader';
 import { runPlayback } from '../playback';
-import { pinIconDataUri, cameraPinIconDataUri, PIN_SIZE, PIN_ANCHOR } from '../marker-icon';
+import { pinIconDataUri, cameraPinIconDataUri, runningDogIconDataUri, PIN_SIZE, PIN_ANCHOR, DOG_SIZE, DOG_ANCHOR } from '../marker-icon';
 
 declare global {
   interface Window {
@@ -127,7 +127,15 @@ export class GoogleMapProvider implements MapProvider {
     const google = window.google;
     if (this.playbackMarker) safeCall(() => this.playbackMarker.setMap(null));
     if (this.map && points.length > 0) {
-      this.playbackMarker = new google.maps.Marker({ position: points[0], map: this.map });
+      this.playbackMarker = new google.maps.Marker({
+        position: points[0],
+        map: this.map,
+        icon: {
+          url: runningDogIconDataUri(),
+          scaledSize: new google.maps.Size(DOG_SIZE.width, DOG_SIZE.height),
+          anchor: new google.maps.Point(DOG_ANCHOR.x, DOG_ANCHOR.y),
+        },
+      });
     }
     return runPlayback(points, (p) => this.playbackMarker?.setPosition(p), options);
   }
