@@ -55,29 +55,41 @@ const DOG_HEIGHT = 40;
  * needed. CSS/SMIL animation inside an SVG keeps animating even when the SVG
  * is only ever used as an `<img>`/data-URI source (Kakao/Google's marker
  * `image`/`icon.url`), not just when injected as HTML content (Naver).
+ *
+ * Chibi-proportioned (oversized head, big glossy eye, floppy ear, blush,
+ * tongue out, curled tail, cream belly patch) rather than a plain silhouette
+ * — legs/ear/tail/body each animate on their own cycle for a livelier,
+ * cuter running motion.
  */
 function runningDogSvg(): string {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${DOG_WIDTH}" height="${DOG_HEIGHT}" viewBox="0 0 48 40">` +
     `<style>` +
     `.dg-body{animation:dg-bob .5s ease-in-out infinite}` +
-    `.dg-leg-a{animation:dg-swing-a .5s ease-in-out infinite;transform-origin:16px 27px}` +
-    `.dg-leg-b{animation:dg-swing-b .5s ease-in-out infinite;transform-origin:34px 27px}` +
-    `.dg-tail{animation:dg-wag .3s ease-in-out infinite;transform-origin:38px 18px}` +
+    `.dg-leg-a{animation:dg-swing-a .5s ease-in-out infinite;transform-origin:17px 27px}` +
+    `.dg-leg-b{animation:dg-swing-b .5s ease-in-out infinite;transform-origin:32px 27px}` +
+    `.dg-tail{animation:dg-wag .3s ease-in-out infinite;transform-origin:36px 20px}` +
+    `.dg-ear{animation:dg-flop .5s ease-in-out infinite;transform-origin:6px 8px}` +
     `@keyframes dg-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.5px)}}` +
-    `@keyframes dg-swing-a{0%,100%{transform:rotate(24deg)}50%{transform:rotate(-24deg)}}` +
-    `@keyframes dg-swing-b{0%,100%{transform:rotate(-24deg)}50%{transform:rotate(24deg)}}` +
-    `@keyframes dg-wag{0%,100%{transform:rotate(-15deg)}50%{transform:rotate(15deg)}}` +
+    `@keyframes dg-swing-a{0%,100%{transform:rotate(22deg)}50%{transform:rotate(-22deg)}}` +
+    `@keyframes dg-swing-b{0%,100%{transform:rotate(-22deg)}50%{transform:rotate(22deg)}}` +
+    `@keyframes dg-wag{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(12deg)}}` +
+    `@keyframes dg-flop{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(10deg)}}` +
     `</style>` +
     `<g class="dg-body">` +
-    `<rect class="dg-leg-b" x="32" y="27" width="3.5" height="10" rx="1.75" fill="#8B5A2B"/>` +
-    `<rect class="dg-leg-a" x="14.5" y="27" width="3.5" height="10" rx="1.75" fill="#8B5A2B"/>` +
-    `<ellipse cx="26" cy="24" rx="14" ry="8" fill="#D9A066"/>` +
-    `<path class="dg-tail" d="M38 18 Q46 12 44 20" stroke="#D9A066" stroke-width="4" fill="none" stroke-linecap="round"/>` +
-    `<circle cx="12" cy="16" r="8" fill="#D9A066"/>` +
-    `<path d="M7 10 Q3 2 9 8 Z" fill="#8B5A2B"/>` +
-    `<ellipse cx="4" cy="18" rx="4" ry="3" fill="#EAC28C"/>` +
-    `<circle cx="1.2" cy="18" r="1.3" fill="#3B2A1A"/>` +
-    `<circle cx="10" cy="14" r="1.2" fill="#3B2A1A"/>` +
+    `<rect class="dg-leg-b" x="30" y="27" width="4" height="9" rx="2" fill="#8B5A2B"/>` +
+    `<rect class="dg-leg-a" x="15" y="27" width="4" height="9" rx="2" fill="#8B5A2B"/>` +
+    `<path class="dg-tail" d="M36 20 Q44 10 40 22 Q38 26 34 22 Z" fill="#D9A066"/>` +
+    `<ellipse cx="25" cy="24" rx="12" ry="8" fill="#E8B084"/>` +
+    `<ellipse cx="25" cy="27" rx="7" ry="4" fill="#FCEBD5"/>` +
+    `<circle cx="12" cy="15" r="10" fill="#E8B084"/>` +
+    `<path class="dg-ear" d="M6 8 Q-1 6 3 16 Q7 15 8 10 Z" fill="#B9814F"/>` +
+    `<circle cx="6" cy="18" r="2" fill="#F4A6A6" opacity="0.7"/>` +
+    `<ellipse cx="4" cy="17" rx="4.5" ry="3.5" fill="#FCEBD5"/>` +
+    `<ellipse cx="1" cy="16.5" rx="1.6" ry="1.3" fill="#3B2A1A"/>` +
+    `<path d="M3 19 Q4.5 20.5 6 19" stroke="#3B2A1A" stroke-width="0.8" fill="none" stroke-linecap="round"/>` +
+    `<path d="M4.5 19.3 Q5 21.5 3.5 21 Z" fill="#F28FA0"/>` +
+    `<circle cx="9" cy="12" r="2.2" fill="#2B1B10"/>` +
+    `<circle cx="9.7" cy="11.2" r="0.7" fill="white"/>` +
     `</g>` +
     `</svg>`;
 }
