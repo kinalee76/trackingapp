@@ -42,8 +42,12 @@ export interface MapProvider {
    */
   addMarker(position: LatLng, options?: { title?: string; color?: string; icon?: 'pin' | 'camera' }): void;
   clearMarkers(): void;
-  /** Creates (once) or moves the single "current location" marker. */
-  setCurrentLocationMarker(position: LatLng): void;
+  /**
+   * Creates (once) or moves the single "현재 위치" marker. While `tracking`
+   * is true it renders as the walking-kid icon instead of the plain dot —
+   * switching the icon if `tracking` changes on an existing marker.
+   */
+  setCurrentLocationMarker(position: LatLng, options?: { tracking?: boolean }): void;
   /** Animates a marker along `points`; returns a handle to stop early. */
   animatePlayback(points: LatLng[], options?: PlaybackOptions): PlaybackHandle;
   destroy(): void;

@@ -79,6 +79,9 @@ MapProvider.setCurrentLocationMarker() — 지도에 "현재 위치" 마커 갱�
 7. **[치명적]** `@capacitor-community/sqlite`의 Android 마이그레이션 `statements` 배열에 세미콜론으로 연결된 멀티스테이트먼트 문자열을 통째로 넣으면, 안드로이드의 `execSQL()`이 첫 문장만 실행하고 나머지를 조용히 버림 — `track_points`/`visits`/`photos`/`memos` 테이블이 기기에 한 번도 생성되지 않았던 원인. 배열 원소를 SQL 문 하나당 하나로 재작성하고, 기존에 손상된 기기를 복구하는 자가 치유 마이그레이션(`SCHEMA_V3`, `IF NOT EXISTS`로 안전)을 추가해 해결.
 8. `RouteDetailScreen`에서 지도(`MapProvider`)와 포인트 로딩이 서로 다른 시점에 준비되면 지도가 초기 기본 좌표에 머무르던 문제 — 둘 다 `useState`로 관리하고 `useEffect([map, points])`로 통합해 해결.
 
+**Phase 19** (자세히: [reports/19-white-dog-and-walking-kid.md](./reports/19-white-dog-and-walking-kid.md)):
+- 재생 마커를 흰색 강아지("흰둥이")로 리컬러링. 추적 중 "현재 위치" 마커를 오리지널 디자인의 걷는 아이 아이콘으로 전환(`setCurrentLocationMarker`의 `tracking` 옵션) — 저작권 있는 캐릭터(짱구)의 실제 디자인은 복제하지 않고 같은 목적의 자체 디자인으로 대체.
+
 **Phase 18** (자세히: [reports/18-cuter-dog-and-smooth-playback.md](./reports/18-cuter-dog-and-smooth-playback.md)):
 - 강아지 아이콘을 치비 비율(큰 머리·눈·귀·꼬리)로 리디자인.
 - `playback.ts`의 재생 이동을 `setInterval` 틱당 1회 순간이동에서 `requestAnimationFrame` 기반 위경도 선형보간으로 교체 — `onStep`/`onDone` 콜백 횟수·시점은 그대로 유지한 채 시각적 이동만 매끄럽게.

@@ -3,7 +3,18 @@ import { MapProviderKeyMissingError } from '../map-provider.interface';
 import { MAP_API_KEYS } from '../map-config';
 import { loadScriptOnce } from '../script-loader';
 import { runPlayback } from '../playback';
-import { pinIconDataUri, cameraPinIconDataUri, runningDogIconDataUri, PIN_SIZE, PIN_ANCHOR, DOG_SIZE, DOG_ANCHOR } from '../marker-icon';
+import {
+  pinIconDataUri,
+  cameraPinIconDataUri,
+  runningDogIconDataUri,
+  walkingKidIconDataUri,
+  PIN_SIZE,
+  PIN_ANCHOR,
+  DOG_SIZE,
+  DOG_ANCHOR,
+  KID_SIZE,
+  KID_ANCHOR,
+} from '../marker-icon';
 
 declare global {
   interface Window {
@@ -36,6 +47,7 @@ export class KakaoMapProvider implements MapProvider {
   private markers: any[] = [];
   private playbackMarker: any = null;
   private currentLocationMarker: any = null;
+  private currentLocationTracking = false;
 
   async init(container: HTMLElement, center: LatLng, zoom = 5): Promise<void> {
     const appKey = MAP_API_KEYS.kakao;
@@ -102,14 +114,31 @@ export class KakaoMapProvider implements MapProvider {
     this.map.setBounds(bounds);
   }
 
-  setCurrentLocationMarker(position: LatLng): void {
+  setCurrentLocationMarker(position: LatLng, options?: { tracking?: boolean }): void {
     if (!this.map) return;
     const kakao = window.kakao;
+    const tracking = options?.tracking ?? false;
     const latLng = new kakao.maps.LatLng(position.lat, position.lng);
+    const image = tracking
+      ? new kakao.maps.MarkerImage(
+          walkingKidIconDataUri(),
+          new kakao.maps.Size(KID_SIZE.width, KID_SIZE.height),
+          { offset: new kakao.maps.Point(KID_ANCHOR.x, KID_ANCHOR.y) },
+        )
+      : null;
+
     if (this.currentLocationMarker) {
       this.currentLocationMarker.setPosition(latLng);
+      // See the matching comment in naver-map.provider.ts — only swap the
+      // icon when tracking actually changes, so the walk-cycle CSS
+      // animation doesn't restart on every GPS update.
+      if (tracking !== this.currentLocationTracking) {
+        this.currentLocationTracking = tracking;
+        this.currentLocationMarker.setImage(image);
+      }
     } else {
-      this.currentLocationMarker = new kakao.maps.Marker({ position: latLng, map: this.map, title: '현재 위치' });
+      this.currentLocationTracking = tracking;
+      this.currentLocationMarker = new kakao.maps.Marker({ position: latLng, map: this.map, title: '현재 위치', image });
     }
   }
 

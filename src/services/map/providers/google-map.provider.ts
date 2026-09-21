@@ -3,7 +3,18 @@ import { MapProviderKeyMissingError } from '../map-provider.interface';
 import { MAP_API_KEYS } from '../map-config';
 import { loadScriptOnce } from '../script-loader';
 import { runPlayback } from '../playback';
-import { pinIconDataUri, cameraPinIconDataUri, runningDogIconDataUri, PIN_SIZE, PIN_ANCHOR, DOG_SIZE, DOG_ANCHOR } from '../marker-icon';
+import {
+  pinIconDataUri,
+  cameraPinIconDataUri,
+  runningDogIconDataUri,
+  walkingKidIconDataUri,
+  PIN_SIZE,
+  PIN_ANCHOR,
+  DOG_SIZE,
+  DOG_ANCHOR,
+  KID_SIZE,
+  KID_ANCHOR,
+} from '../marker-icon';
 
 declare global {
   interface Window {
@@ -39,6 +50,7 @@ export class GoogleMapProvider implements MapProvider {
   private markers: any[] = [];
   private playbackMarker: any = null;
   private currentLocationMarker: any = null;
+  private currentLocationTracking = false;
 
   async init(container: HTMLElement, center: LatLng, zoom = 14): Promise<void> {
     const apiKey = MAP_API_KEYS.google;
@@ -101,25 +113,37 @@ export class GoogleMapProvider implements MapProvider {
     this.map.fitBounds(bounds, 40);
   }
 
-  setCurrentLocationMarker(position: LatLng): void {
+  setCurrentLocationMarker(position: LatLng, options?: { tracking?: boolean }): void {
     if (!this.map) return;
-    if (this.currentLocationMarker) {
-      this.currentLocationMarker.setPosition(position);
-    } else {
-      const google = window.google;
-      this.currentLocationMarker = new google.maps.Marker({
-        position,
-        map: this.map,
-        title: '현재 위치',
-        icon: {
+    const google = window.google;
+    const tracking = options?.tracking ?? false;
+    const icon = tracking
+      ? {
+          url: walkingKidIconDataUri(),
+          scaledSize: new google.maps.Size(KID_SIZE.width, KID_SIZE.height),
+          anchor: new google.maps.Point(KID_ANCHOR.x, KID_ANCHOR.y),
+        }
+      : {
           path: google.maps.SymbolPath.CIRCLE,
           scale: 8,
           fillColor: '#4F46E5',
           fillOpacity: 1,
           strokeColor: '#ffffff',
           strokeWeight: 2,
-        },
-      });
+        };
+
+    if (this.currentLocationMarker) {
+      this.currentLocationMarker.setPosition(position);
+      // See the matching comment in naver-map.provider.ts — only swap the
+      // icon when tracking actually changes, so the walk-cycle CSS
+      // animation doesn't restart on every GPS update.
+      if (tracking !== this.currentLocationTracking) {
+        this.currentLocationTracking = tracking;
+        this.currentLocationMarker.setIcon(icon);
+      }
+    } else {
+      this.currentLocationTracking = tracking;
+      this.currentLocationMarker = new google.maps.Marker({ position, map: this.map, title: '현재 위치', icon });
     }
   }
 

@@ -20,15 +20,26 @@ export function MapScreen() {
   const mapRef = useRef<MapProvider | null>(null);
   const watchIdRef = useRef<string | null>(null);
   const hasCenteredRef = useRef(false);
+  const trackingRef = useRef(false);
 
   useEffect(() => {
     getMapProvider().then(setProvider);
     setTracking(geolocation.isTracking());
   }, []);
 
+  // The live-location watchPosition callback below is subscribed once on
+  // mount (see its own effect's empty deps) and would otherwise close over
+  // a stale `tracking` value forever — mirror it into a ref so the callback
+  // always sees the current state without needing to resubscribe the GPS
+  // watch every time tracking is toggled.
+  useEffect(() => {
+    trackingRef.current = tracking;
+  }, [tracking]);
+
   // Live "current location" marker — active regardless of tracking state,
-  // updated on every location fix while this screen is mounted. Separate
-  // from the recording watcher in geolocation.service (which only runs
+  // updated on every location fix while this screen is mounted (renders as
+  // the walking-kid icon while `tracking` is on, a plain dot otherwise).
+  // Separate from the recording watcher in geolocation.service (which only runs
   // while tracking is on) so the user always sees where they are.
   useEffect(() => {
     let cancelled = false;
@@ -37,7 +48,7 @@ export function MapScreen() {
         const watchId = await Geolocation.watchPosition({ enableHighAccuracy: true }, (position, err) => {
           if (err || !position) return;
           const point = { lat: position.coords.latitude, lng: position.coords.longitude };
-          mapRef.current?.setCurrentLocationMarker(point);
+          mapRef.current?.setCurrentLocationMarker(point, { tracking: trackingRef.current });
           if (!hasCenteredRef.current) {
             mapRef.current?.setCenter(point);
             hasCenteredRef.current = true;

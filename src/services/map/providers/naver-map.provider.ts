@@ -3,7 +3,18 @@ import { MapProviderKeyMissingError } from '../map-provider.interface';
 import { MAP_API_KEYS } from '../map-config';
 import { loadScriptOnce } from '../script-loader';
 import { runPlayback } from '../playback';
-import { pinIconHtml, cameraPinIconHtml, runningDogIconHtml, PIN_SIZE, PIN_ANCHOR, DOG_SIZE, DOG_ANCHOR } from '../marker-icon';
+import {
+  pinIconHtml,
+  cameraPinIconHtml,
+  runningDogIconHtml,
+  walkingKidIconHtml,
+  PIN_SIZE,
+  PIN_ANCHOR,
+  DOG_SIZE,
+  DOG_ANCHOR,
+  KID_SIZE,
+  KID_ANCHOR,
+} from '../marker-icon';
 
 declare global {
   interface Window {
@@ -34,6 +45,7 @@ export class NaverMapProvider implements MapProvider {
   private markers: any[] = [];
   private playbackMarker: any = null;
   private currentLocationMarker: any = null;
+  private currentLocationTracking = false;
 
   async init(container: HTMLElement, center: LatLng, zoom = 14): Promise<void> {
     const clientId = MAP_API_KEYS.naver;
@@ -102,21 +114,35 @@ export class NaverMapProvider implements MapProvider {
     this.markers = [];
   }
 
-  setCurrentLocationMarker(position: LatLng): void {
+  setCurrentLocationMarker(position: LatLng, options?: { tracking?: boolean }): void {
     if (!this.map) return;
     const naver = window.naver;
+    const tracking = options?.tracking ?? false;
     const latLng = new naver.maps.LatLng(position.lat, position.lng);
-    if (this.currentLocationMarker) {
-      this.currentLocationMarker.setPosition(latLng);
-    } else {
-      this.currentLocationMarker = new naver.maps.Marker({
-        position: latLng,
-        map: this.map,
-        icon: {
+    const icon = tracking
+      ? {
+          content: walkingKidIconHtml(),
+          size: new naver.maps.Size(KID_SIZE.width, KID_SIZE.height),
+          anchor: new naver.maps.Point(KID_ANCHOR.x, KID_ANCHOR.y),
+        }
+      : {
           content: '<div style="width:16px;height:16px;border-radius:50%;background:#4F46E5;border:2px solid white;box-shadow:0 0 4px rgba(0,0,0,0.4);"></div>',
           anchor: new naver.maps.Point(8, 8),
-        },
-      });
+        };
+
+    if (this.currentLocationMarker) {
+      this.currentLocationMarker.setPosition(latLng);
+      // Only swap the icon when the tracking state actually changes —
+      // resetting it on every GPS update would restart the walk-cycle CSS
+      // animation from frame 0 each time, making it look jittery instead of
+      // continuous.
+      if (tracking !== this.currentLocationTracking) {
+        this.currentLocationTracking = tracking;
+        this.currentLocationMarker.setIcon(icon);
+      }
+    } else {
+      this.currentLocationTracking = tracking;
+      this.currentLocationMarker = new naver.maps.Marker({ position: latLng, map: this.map, icon });
     }
   }
 
