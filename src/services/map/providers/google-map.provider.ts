@@ -7,13 +7,13 @@ import {
   pinIconDataUri,
   cameraPinIconDataUri,
   runningDogIconDataUri,
-  walkingKidIconDataUri,
+  trackingIconDataUri,
   PIN_SIZE,
   PIN_ANCHOR,
   DOG_SIZE,
   DOG_ANCHOR,
-  KID_SIZE,
-  KID_ANCHOR,
+  TRACKING_ICON_SIZE,
+  TRACKING_ICON_ANCHOR,
 } from '../marker-icon';
 
 declare global {
@@ -119,9 +119,9 @@ export class GoogleMapProvider implements MapProvider {
     const tracking = options?.tracking ?? false;
     const icon = tracking
       ? {
-          url: walkingKidIconDataUri(),
-          scaledSize: new google.maps.Size(KID_SIZE.width, KID_SIZE.height),
-          anchor: new google.maps.Point(KID_ANCHOR.x, KID_ANCHOR.y),
+          url: trackingIconDataUri(),
+          scaledSize: new google.maps.Size(TRACKING_ICON_SIZE.width, TRACKING_ICON_SIZE.height),
+          anchor: new google.maps.Point(TRACKING_ICON_ANCHOR.x, TRACKING_ICON_ANCHOR.y),
         }
       : {
           path: google.maps.SymbolPath.CIRCLE,

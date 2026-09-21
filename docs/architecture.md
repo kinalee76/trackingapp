@@ -79,6 +79,9 @@ MapProvider.setCurrentLocationMarker() — 지도에 "현재 위치" 마커 갱�
 7. **[치명적]** `@capacitor-community/sqlite`의 Android 마이그레이션 `statements` 배열에 세미콜론으로 연결된 멀티스테이트먼트 문자열을 통째로 넣으면, 안드로이드의 `execSQL()`이 첫 문장만 실행하고 나머지를 조용히 버림 — `track_points`/`visits`/`photos`/`memos` 테이블이 기기에 한 번도 생성되지 않았던 원인. 배열 원소를 SQL 문 하나당 하나로 재작성하고, 기존에 손상된 기기를 복구하는 자가 치유 마이그레이션(`SCHEMA_V3`, `IF NOT EXISTS`로 안전)을 추가해 해결.
 8. `RouteDetailScreen`에서 지도(`MapProvider`)와 포인트 로딩이 서로 다른 시점에 준비되면 지도가 초기 기본 좌표에 머무르던 문제 — 둘 다 `useState`로 관리하고 `useEffect([map, points])`로 통합해 해결.
 
+**Phase 21** (자세히: [reports/21-chick-and-baby-puppy.md](./reports/21-chick-and-baby-puppy.md)):
+- 추적 중 현재 위치 아이콘을 병아리로 교체. 재생 마커를 머리 비율이 더 큰 "애기 강아지"로 조정. 추적 아이콘 관련 export 이름을 특정 캐릭터에 종속되지 않게(`trackingIconHtml/DataUri`, `TRACKING_ICON_SIZE/ANCHOR`) 리네임.
+
 **Phase 20** (자세히: [reports/20-girl-icon-and-cuter-brown-dog.md](./reports/20-girl-icon-and-cuter-brown-dog.md)):
 - 재생 마커를 갈색 강아지로 재변경(더 귀엽게 디테일 보강). 추적 중 현재 위치 아이콘을 트윈테일+리본+원피스의 여자아이 디자인으로 재작업.
 

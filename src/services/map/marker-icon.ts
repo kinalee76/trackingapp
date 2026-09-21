@@ -50,15 +50,15 @@ const DOG_WIDTH = 48;
 const DOG_HEIGHT = 40;
 
 /**
- * A small running brown-puppy ("댕댕이") animation for the route-replay
+ * A small running baby-puppy ("애기 강아지") animation for the route-replay
  * ("재생") marker, built entirely from inline SVG + CSS `@keyframes` — no
  * external GIF/image file needed. CSS/SMIL animation inside an SVG keeps
  * animating even when the SVG is only ever used as an `<img>`/data-URI
  * source (Kakao/Google's marker `image`/`icon.url`), not just when injected
  * as HTML content (Naver).
  *
- * Chibi-proportioned (oversized head, big glossy eye with a double
- * highlight, floppy two-tone ear, rosy blush, tongue out, curled tail)
+ * Baby-proportioned (head noticeably bigger than the body, triple-highlight
+ * glossy eye, floppy two-tone ear, rosy blush, tongue out, curled tail)
  * rather than a plain silhouette — legs/ear/tail/body each animate on their
  * own cycle for a livelier, cuter running motion. An original generic-puppy
  * design, not any particular character.
@@ -67,10 +67,10 @@ function runningDogSvg(): string {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${DOG_WIDTH}" height="${DOG_HEIGHT}" viewBox="0 0 48 40">` +
     `<style>` +
     `.dg-body{animation:dg-bob .5s ease-in-out infinite}` +
-    `.dg-leg-a{animation:dg-swing-a .5s ease-in-out infinite;transform-origin:17px 27px}` +
-    `.dg-leg-b{animation:dg-swing-b .5s ease-in-out infinite;transform-origin:32px 27px}` +
-    `.dg-tail{animation:dg-wag .3s ease-in-out infinite;transform-origin:36px 20px}` +
-    `.dg-ear{animation:dg-flop .5s ease-in-out infinite;transform-origin:6px 8px}` +
+    `.dg-leg-a{animation:dg-swing-a .5s ease-in-out infinite;transform-origin:17px 26px}` +
+    `.dg-leg-b{animation:dg-swing-b .5s ease-in-out infinite;transform-origin:31px 26px}` +
+    `.dg-tail{animation:dg-wag .3s ease-in-out infinite;transform-origin:35px 19px}` +
+    `.dg-ear{animation:dg-flop .5s ease-in-out infinite;transform-origin:7px 7px}` +
     `@keyframes dg-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.5px)}}` +
     `@keyframes dg-swing-a{0%,100%{transform:rotate(22deg)}50%{transform:rotate(-22deg)}}` +
     `@keyframes dg-swing-b{0%,100%{transform:rotate(-22deg)}50%{transform:rotate(22deg)}}` +
@@ -78,21 +78,22 @@ function runningDogSvg(): string {
     `@keyframes dg-flop{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(10deg)}}` +
     `</style>` +
     `<g class="dg-body">` +
-    `<rect class="dg-leg-b" x="30" y="27" width="4" height="9" rx="2" fill="#7A4A24"/>` +
-    `<rect class="dg-leg-a" x="15" y="27" width="4" height="9" rx="2" fill="#7A4A24"/>` +
-    `<path class="dg-tail" d="M36 20 Q44 10 40 22 Q38 26 34 22 Z" fill="#C1793F"/>` +
-    `<ellipse cx="25" cy="24" rx="12" ry="8" fill="#D89150"/>` +
-    `<ellipse cx="25" cy="27" rx="7" ry="4" fill="#FBE3C4"/>` +
-    `<circle cx="12" cy="15" r="10" fill="#D89150"/>` +
-    `<path class="dg-ear" d="M6 8 Q-2 5 2 17 Q7 16 8 10 Z" fill="#7A4A24"/>` +
-    `<circle cx="6" cy="18" r="2.2" fill="#F4A6A6" opacity="0.75"/>` +
-    `<ellipse cx="4" cy="17" rx="4.5" ry="3.5" fill="#FBE3C4"/>` +
-    `<ellipse cx="1" cy="16.5" rx="1.6" ry="1.3" fill="#2B1B10"/>` +
-    `<path d="M3 19 Q4.5 20.5 6 19" stroke="#2B1B10" stroke-width="0.8" fill="none" stroke-linecap="round"/>` +
-    `<path d="M4.5 19.3 Q5 21.5 3.5 21 Z" fill="#F28FA0"/>` +
-    `<circle cx="9" cy="12" r="2.4" fill="#241207"/>` +
-    `<circle cx="9.8" cy="11" r="0.8" fill="white"/>` +
-    `<circle cx="8.3" cy="12.6" r="0.4" fill="white" opacity="0.8"/>` +
+    `<rect class="dg-leg-b" x="29" y="26" width="3.5" height="7" rx="1.75" fill="#7A4A24"/>` +
+    `<rect class="dg-leg-a" x="15" y="26" width="3.5" height="7" rx="1.75" fill="#7A4A24"/>` +
+    `<path class="dg-tail" d="M35 19 Q42 10 39 21 Q37 24 33 21 Z" fill="#C1793F"/>` +
+    `<ellipse cx="24" cy="23" rx="10" ry="6.5" fill="#D89150"/>` +
+    `<ellipse cx="24" cy="25.5" rx="6" ry="3.5" fill="#FBE3C4"/>` +
+    `<circle cx="13" cy="14" r="11" fill="#D89150"/>` +
+    `<path class="dg-ear" d="M6 7 Q-3 4 1 17 Q7 16 9 9 Z" fill="#7A4A24"/>` +
+    `<circle cx="6.5" cy="18.5" r="2.4" fill="#F4A6A6" opacity="0.75"/>` +
+    `<ellipse cx="4" cy="17.5" rx="4.8" ry="3.7" fill="#FBE3C4"/>` +
+    `<ellipse cx="1" cy="17" rx="1.7" ry="1.4" fill="#2B1B10"/>` +
+    `<path d="M3 19.5 Q4.5 21 6 19.5" stroke="#2B1B10" stroke-width="0.8" fill="none" stroke-linecap="round"/>` +
+    `<path d="M4.5 19.8 Q5 22 3.5 21.5 Z" fill="#F28FA0"/>` +
+    `<circle cx="9" cy="12" r="2.8" fill="#241207"/>` +
+    `<circle cx="10" cy="10.7" r="1" fill="white"/>` +
+    `<circle cx="8" cy="13.2" r="0.5" fill="white" opacity="0.85"/>` +
+    `<circle cx="10.3" cy="12.8" r="0.35" fill="white" opacity="0.7"/>` +
     `</g>` +
     `</svg>`;
 }
@@ -109,67 +110,55 @@ export const DOG_SIZE = { width: DOG_WIDTH, height: DOG_HEIGHT };
 /** Centered — the dog marks a moving point, not a pin tip pointing at one. */
 export const DOG_ANCHOR = { x: DOG_WIDTH / 2, y: DOG_HEIGHT / 2 };
 
-const KID_WIDTH = 36;
-const KID_HEIGHT = 44;
+const TRACKING_ICON_WIDTH = 36;
+const TRACKING_ICON_HEIGHT = 40;
 
 /**
- * A small walking-girl animation for the "현재 위치" marker while tracking is
- * active, built the same way as the dog (inline SVG + CSS `@keyframes`, no
- * external asset). Deliberately an original, generic chibi girl — round
- * head, twin pigtails with a bow, a flared dress instead of pants — not a
- * rendering of any particular licensed cartoon character.
+ * A small walking baby-chick ("병아리") animation for the "현재 위치" marker
+ * while tracking is active, built the same way as the dog (inline SVG + CSS
+ * `@keyframes`, no external asset). Deliberately an original, generic
+ * design — round fluffy body, tiny wing, waddling stick legs — not a
+ * rendering of any particular licensed character. (This marker's character
+ * has changed a few times — see docs/reports/ — so the export names stay
+ * generic rather than tied to whichever animal/character is current.)
  */
-function walkingKidSvg(): string {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${KID_WIDTH}" height="${KID_HEIGHT}" viewBox="0 0 36 44">` +
+function trackingIconSvg(): string {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${TRACKING_ICON_WIDTH}" height="${TRACKING_ICON_HEIGHT}" viewBox="0 0 36 40">` +
     `<style>` +
-    `.kd-body{animation:kd-bob .45s ease-in-out infinite}` +
-    `.kd-leg-a{animation:kd-swing-a .45s ease-in-out infinite;transform-origin:14px 30px}` +
-    `.kd-leg-b{animation:kd-swing-b .45s ease-in-out infinite;transform-origin:22px 30px}` +
-    `.kd-arm-a{animation:kd-swing-b .45s ease-in-out infinite;transform-origin:12px 20px}` +
-    `.kd-arm-b{animation:kd-swing-a .45s ease-in-out infinite;transform-origin:24px 20px}` +
-    `.kd-tail-a{animation:kd-swing-a .45s ease-in-out infinite;transform-origin:6px 12px}` +
-    `.kd-tail-b{animation:kd-swing-b .45s ease-in-out infinite;transform-origin:30px 12px}` +
-    `@keyframes kd-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}` +
-    `@keyframes kd-swing-a{0%,100%{transform:rotate(14deg)}50%{transform:rotate(-14deg)}}` +
-    `@keyframes kd-swing-b{0%,100%{transform:rotate(-14deg)}50%{transform:rotate(14deg)}}` +
+    `.ck-body{animation:ck-bob .4s ease-in-out infinite}` +
+    `.ck-leg-a{animation:ck-swing-a .4s ease-in-out infinite;transform-origin:14px 28px}` +
+    `.ck-leg-b{animation:ck-swing-b .4s ease-in-out infinite;transform-origin:21px 28px}` +
+    `.ck-wing{animation:ck-flap .4s ease-in-out infinite;transform-origin:11px 17px}` +
+    `@keyframes ck-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}` +
+    `@keyframes ck-swing-a{0%,100%{transform:rotate(16deg)}50%{transform:rotate(-16deg)}}` +
+    `@keyframes ck-swing-b{0%,100%{transform:rotate(-16deg)}50%{transform:rotate(16deg)}}` +
+    `@keyframes ck-flap{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(18deg)}}` +
     `</style>` +
-    `<g class="kd-body">` +
-    `<rect class="kd-leg-a" x="12" y="28" width="4" height="14" rx="2" fill="#F6D2A8"/>` +
-    `<rect class="kd-leg-b" x="20" y="28" width="4" height="14" rx="2" fill="#F6D2A8"/>` +
-    `<path class="kd-arm-a" d="M12 20 L8 28" stroke="#F6D2A8" stroke-width="3.5" fill="none" stroke-linecap="round"/>` +
-    `<path class="kd-arm-b" d="M24 20 L28 28" stroke="#F6D2A8" stroke-width="3.5" fill="none" stroke-linecap="round"/>` +
-    `<path d="M11 18 L25 18 L29 32 L7 32 Z" fill="#FF7FA0"/>` +
-    `<path d="M11 18 L25 18 L23.5 23 L12.5 23 Z" fill="#FF9BB8"/>` +
-    `<ellipse class="kd-tail-a" cx="6" cy="16" rx="2.6" ry="5" fill="#3B2A20"/>` +
-    `<ellipse class="kd-tail-b" cx="30" cy="16" rx="2.6" ry="5" fill="#3B2A20"/>` +
-    `<circle cx="18" cy="11" r="9" fill="#F6D2A8"/>` +
-    `<path d="M8 9 Q18 -3 28 9 Q28 4 18 3 Q8 4 8 9 Z" fill="#3B2A20"/>` +
-    `<circle cx="6" cy="10" r="3.4" fill="#3B2A20"/>` +
-    `<circle cx="30" cy="10" r="3.4" fill="#3B2A20"/>` +
-    `<path d="M26 7 L29.5 5.3 L29 8.3 Z" fill="#FF6B8B"/>` +
-    `<path d="M33 7 L29.5 5.3 L30 8.3 Z" fill="#FF6B8B"/>` +
-    `<circle cx="29.5" cy="7.2" r="1.1" fill="#E8496C"/>` +
-    `<circle cx="12" cy="14" r="1.7" fill="#F9AFAF" opacity="0.7"/>` +
-    `<circle cx="24" cy="14" r="1.7" fill="#F9AFAF" opacity="0.7"/>` +
-    `<circle cx="14" cy="12" r="1.4" fill="#2B1B10"/>` +
-    `<circle cx="22" cy="12" r="1.4" fill="#2B1B10"/>` +
-    `<circle cx="14.5" cy="11.3" r="0.4" fill="white"/>` +
-    `<circle cx="22.5" cy="11.3" r="0.4" fill="white"/>` +
-    `<path d="M12.3 10.3 L10.7 9.3" stroke="#2B1B10" stroke-width="0.7" stroke-linecap="round"/>` +
-    `<path d="M23.7 10.3 L25.3 9.3" stroke="#2B1B10" stroke-width="0.7" stroke-linecap="round"/>` +
-    `<path d="M14 16 Q18 18.5 22 16" stroke="#2B1B10" stroke-width="1" fill="none" stroke-linecap="round"/>` +
+    `<g class="ck-body">` +
+    `<path class="ck-leg-a" d="M14 28 L12 33" stroke="#FF9F1C" stroke-width="2" fill="none" stroke-linecap="round"/>` +
+    `<path d="M9.5 33 L14.5 33" stroke="#FF9F1C" stroke-width="1.6" fill="none" stroke-linecap="round"/>` +
+    `<path class="ck-leg-b" d="M21 28 L23 33" stroke="#FF9F1C" stroke-width="2" fill="none" stroke-linecap="round"/>` +
+    `<path d="M20.5 33 L25.5 33" stroke="#FF9F1C" stroke-width="1.6" fill="none" stroke-linecap="round"/>` +
+    `<path class="ck-wing" d="M9 14 Q3 16 7 24 Q11 22 11 15 Z" fill="#F5C242"/>` +
+    `<circle cx="19" cy="19" r="12" fill="#FFDD57"/>` +
+    `<ellipse cx="19" cy="24" rx="7.5" ry="5" fill="#FFEEA8"/>` +
+    `<path d="M15 6 Q18 1 21 6 Q18 5 15 6 Z" fill="#F5C242"/>` +
+    `<path d="M3 16 L10 14 L10 20 Z" fill="#FF9F1C"/>` +
+    `<circle cx="9.5" cy="21" r="2" fill="#F9AFAF" opacity="0.7"/>` +
+    `<circle cx="11" cy="14.5" r="1.9" fill="#241207"/>` +
+    `<circle cx="11.8" cy="13.3" r="0.65" fill="white"/>` +
     `</g>` +
     `</svg>`;
 }
 
-export function walkingKidIconHtml(): string {
-  return walkingKidSvg();
+export function trackingIconHtml(): string {
+  return trackingIconSvg();
 }
 
-export function walkingKidIconDataUri(): string {
-  return `data:image/svg+xml;utf8,${encodeURIComponent(walkingKidSvg())}`;
+export function trackingIconDataUri(): string {
+  return `data:image/svg+xml;utf8,${encodeURIComponent(trackingIconSvg())}`;
 }
 
-export const KID_SIZE = { width: KID_WIDTH, height: KID_HEIGHT };
+export const TRACKING_ICON_SIZE = { width: TRACKING_ICON_WIDTH, height: TRACKING_ICON_HEIGHT };
 /** Centered — marks a moving point, not a pin tip pointing at one. */
-export const KID_ANCHOR = { x: KID_WIDTH / 2, y: KID_HEIGHT / 2 };
+export const TRACKING_ICON_ANCHOR = { x: TRACKING_ICON_WIDTH / 2, y: TRACKING_ICON_HEIGHT / 2 };

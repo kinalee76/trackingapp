@@ -38,8 +38,8 @@ export function MapScreen() {
 
   // Live "current location" marker — active regardless of tracking state,
   // updated on every location fix while this screen is mounted (renders as
-  // the walking-kid icon while `tracking` is on, a plain dot otherwise).
-  // Separate from the recording watcher in geolocation.service (which only runs
+  // the tracking icon — see marker-icon.ts — while `tracking` is on, a plain
+  // dot otherwise). Separate from the recording watcher in geolocation.service (which only runs
   // while tracking is on) so the user always sees where they are.
   useEffect(() => {
     let cancelled = false;

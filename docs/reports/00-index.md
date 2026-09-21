@@ -27,6 +27,7 @@
 | 18 | 개선: 강아지 아이콘 더 귀엽게 + 재생 이동을 프레임 단위 보간으로 부드럽게 | 완료 (실기기 검증) | [18-cuter-dog-and-smooth-playback.md](./18-cuter-dog-and-smooth-playback.md) |
 | 19 | 변경: 재생 마커를 흰둥이(흰 강아지)로, 추적 중 현재 위치를 오리지널 디자인의 걷는 아이 아이콘으로 | 완료 (실기기 검증) | [19-white-dog-and-walking-kid.md](./19-white-dog-and-walking-kid.md) |
 | 20 | 변경: 걷는 아이를 여자아이로, 흰둥이를 더 귀여운 갈색 댕댕이로 | 완료 (실기기 검증) | [20-girl-icon-and-cuter-brown-dog.md](./20-girl-icon-and-cuter-brown-dog.md) |
+| 21 | 변경: 추적 중 아이콘을 병아리로, 재생 아이콘을 애기 강아지로 (+ 아이콘 export 이름 캐릭터 무관하게 정리) | 완료 (실기기 검증) | [21-chick-and-baby-puppy.md](./21-chick-and-baby-puppy.md) |
 
 ## 알려진 미해결 이슈
 - 네이버 지도 인증이 간헐적으로 실패("네이버 지도 Open API 인증이 실패했습니다")하는 경우가 있음(같은 API 키로도 성공/실패가 오감). 원인 미확인(NCP 트래픽 제한/서비스 URL 제약/네트워크 추정). Phase 14 수정으로 이 상태에서도 앱이 크래시하지는 않지만, 지도 자체가 안 보이는 문제는 별개로 남아있음.

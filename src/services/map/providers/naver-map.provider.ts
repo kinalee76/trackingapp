@@ -7,13 +7,13 @@ import {
   pinIconHtml,
   cameraPinIconHtml,
   runningDogIconHtml,
-  walkingKidIconHtml,
+  trackingIconHtml,
   PIN_SIZE,
   PIN_ANCHOR,
   DOG_SIZE,
   DOG_ANCHOR,
-  KID_SIZE,
-  KID_ANCHOR,
+  TRACKING_ICON_SIZE,
+  TRACKING_ICON_ANCHOR,
 } from '../marker-icon';
 
 declare global {
@@ -121,9 +121,9 @@ export class NaverMapProvider implements MapProvider {
     const latLng = new naver.maps.LatLng(position.lat, position.lng);
     const icon = tracking
       ? {
-          content: walkingKidIconHtml(),
-          size: new naver.maps.Size(KID_SIZE.width, KID_SIZE.height),
-          anchor: new naver.maps.Point(KID_ANCHOR.x, KID_ANCHOR.y),
+          content: trackingIconHtml(),
+          size: new naver.maps.Size(TRACKING_ICON_SIZE.width, TRACKING_ICON_SIZE.height),
+          anchor: new naver.maps.Point(TRACKING_ICON_ANCHOR.x, TRACKING_ICON_ANCHOR.y),
         }
       : {
           content: '<div style="width:16px;height:16px;border-radius:50%;background:#4F46E5;border:2px solid white;box-shadow:0 0 4px rgba(0,0,0,0.4);"></div>',

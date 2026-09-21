@@ -7,13 +7,13 @@ import {
   pinIconDataUri,
   cameraPinIconDataUri,
   runningDogIconDataUri,
-  walkingKidIconDataUri,
+  trackingIconDataUri,
   PIN_SIZE,
   PIN_ANCHOR,
   DOG_SIZE,
   DOG_ANCHOR,
-  KID_SIZE,
-  KID_ANCHOR,
+  TRACKING_ICON_SIZE,
+  TRACKING_ICON_ANCHOR,
 } from '../marker-icon';
 
 declare global {
@@ -121,9 +121,9 @@ export class KakaoMapProvider implements MapProvider {
     const latLng = new kakao.maps.LatLng(position.lat, position.lng);
     const image = tracking
       ? new kakao.maps.MarkerImage(
-          walkingKidIconDataUri(),
-          new kakao.maps.Size(KID_SIZE.width, KID_SIZE.height),
-          { offset: new kakao.maps.Point(KID_ANCHOR.x, KID_ANCHOR.y) },
+          trackingIconDataUri(),
+          new kakao.maps.Size(TRACKING_ICON_SIZE.width, TRACKING_ICON_SIZE.height),
+          { offset: new kakao.maps.Point(TRACKING_ICON_ANCHOR.x, TRACKING_ICON_ANCHOR.y) },
         )
       : null;
 
