@@ -80,6 +80,9 @@ MapProvider.setCurrentLocationMarker() — 지도에 "현재 위치" 마커 갱�
 7. **[치명적]** `@capacitor-community/sqlite`의 Android 마이그레이션 `statements` 배열에 세미콜론으로 연결된 멀티스테이트먼트 문자열을 통째로 넣으면, 안드로이드의 `execSQL()`이 첫 문장만 실행하고 나머지를 조용히 버림 — `track_points`/`visits`/`photos`/`memos` 테이블이 기기에 한 번도 생성되지 않았던 원인. 배열 원소를 SQL 문 하나당 하나로 재작성하고, 기존에 손상된 기기를 복구하는 자가 치유 마이그레이션(`SCHEMA_V3`, `IF NOT EXISTS`로 안전)을 추가해 해결.
 8. `RouteDetailScreen`에서 지도(`MapProvider`)와 포인트 로딩이 서로 다른 시점에 준비되면 지도가 초기 기본 좌표에 머무르던 문제 — 둘 다 `useState`로 관리하고 `useEffect([map, points])`로 통합해 해결.
 
+**Phase 25** (자세히: [reports/25-recenter-button.md](./reports/25-recenter-button.md)):
+- 지도 화면 우측 하단에 "현재 위치로 이동" 버튼 추가. 추적 여부와 무관하게 항상 사용 가능.
+
 **Phase 24** (자세히: [reports/24-place-info-list-icons.md](./reports/24-place-info-list-icons.md)):
 - 장소 정보 목록에서 `source`에 따라 보라색 카메라 아이콘(사진)/파란색 위치 핀 아이콘(체류·수동 저장)을 제목 앞에 표시.
 

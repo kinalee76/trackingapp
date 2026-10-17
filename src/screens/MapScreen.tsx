@@ -21,6 +21,7 @@ export function MapScreen() {
   const watchIdRef = useRef<string | null>(null);
   const hasCenteredRef = useRef(false);
   const trackingRef = useRef(false);
+  const currentPositionRef = useRef<{ lat: number; lng: number } | null>(null);
 
   useEffect(() => {
     getMapProvider().then(setProvider);
@@ -48,6 +49,7 @@ export function MapScreen() {
         const watchId = await Geolocation.watchPosition({ enableHighAccuracy: true }, (position, err) => {
           if (err || !position) return;
           const point = { lat: position.coords.latitude, lng: position.coords.longitude };
+          currentPositionRef.current = point;
           mapRef.current?.setCurrentLocationMarker(point, { tracking: trackingRef.current });
           if (!hasCenteredRef.current) {
             mapRef.current?.setCenter(point);
@@ -119,6 +121,30 @@ export function MapScreen() {
     }
   }
 
+  /**
+   * "현재 위치로 이동" — recenters the map on the live location, whether or
+   * not tracking is on (the live marker/watcher above already runs
+   * regardless of tracking state, so this is just a manual re-center for
+   * when the user has panned the map away from themselves, e.g. to look
+   * back along the route while walking).
+   */
+  async function handleRecenter() {
+    setError(null);
+    try {
+      if (currentPositionRef.current) {
+        mapRef.current?.setCenter(currentPositionRef.current);
+        return;
+      }
+      // No live fix cached yet (e.g. permission just granted) — fetch one directly.
+      const position = await Geolocation.getCurrentPosition({ enableHighAccuracy: true });
+      const point = { lat: position.coords.latitude, lng: position.coords.longitude };
+      currentPositionRef.current = point;
+      mapRef.current?.setCenter(point);
+    } catch (e) {
+      setError(`현재 위치를 가져오지 못했습니다: ${(e as Error).message}`);
+    }
+  }
+
   async function handleCapturePhoto() {
     setError(null);
     setCapturingPhoto(true);
@@ -151,8 +177,33 @@ export function MapScreen() {
         </span>
         {error && <span style={{ fontSize: 13, color: '#b91c1c' }}>{error}</span>}
       </div>
-      <div style={{ flex: 1 }}>
+      <div style={{ flex: 1, position: 'relative' }}>
         <MapView provider={provider} center={DEFAULT_CENTER} zoom={16} onReady={handleMapReady} />
+        <button
+          onClick={handleRecenter}
+          aria-label="현재 위치로 이동"
+          title="현재 위치로 이동"
+          style={{
+            position: 'absolute',
+            right: 16,
+            bottom: 16,
+            width: 48,
+            height: 48,
+            borderRadius: '50%',
+            border: 'none',
+            background: 'white',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.3)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+          }}
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3" fill="#2563EB" />
+            <path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        </button>
       </div>
     </div>
   );
