@@ -80,6 +80,9 @@ MapProvider.setCurrentLocationMarker() — 지도에 "현재 위치" 마커 갱�
 7. **[치명적]** `@capacitor-community/sqlite`의 Android 마이그레이션 `statements` 배열에 세미콜론으로 연결된 멀티스테이트먼트 문자열을 통째로 넣으면, 안드로이드의 `execSQL()`이 첫 문장만 실행하고 나머지를 조용히 버림 — `track_points`/`visits`/`photos`/`memos` 테이블이 기기에 한 번도 생성되지 않았던 원인. 배열 원소를 SQL 문 하나당 하나로 재작성하고, 기존에 손상된 기기를 복구하는 자가 치유 마이그레이션(`SCHEMA_V3`, `IF NOT EXISTS`로 안전)을 추가해 해결.
 8. `RouteDetailScreen`에서 지도(`MapProvider`)와 포인트 로딩이 서로 다른 시점에 준비되면 지도가 초기 기본 좌표에 머무르던 문제 — 둘 다 `useState`로 관리하고 `useEffect([map, points])`로 통합해 해결.
 
+**Phase 24** (자세히: [reports/24-place-info-list-icons.md](./reports/24-place-info-list-icons.md)):
+- 장소 정보 목록에서 `source`에 따라 보라색 카메라 아이콘(사진)/파란색 위치 핀 아이콘(체류·수동 저장)을 제목 앞에 표시.
+
 **Phase 23** (자세히: [reports/23-hardware-back-button.md](./reports/23-hardware-back-button.md)):
 - `@capacitor/app` 추가, 안드로이드 하드웨어 뒤로가기(백키)를 가로채서 재정의: 상세 화면 → 목록, 목록/설정 등 하위 화면 → 지도 탭, 지도 탭(메인) → 종료 확인 팝업(`Dialog.confirm`). `RecordsTab`/`PlaceInfoTab`의 `onRegisterBack` prop으로 현재 활성 탭의 상세-열림 여부를 App.tsx의 전역 리스너에 알림.
 
