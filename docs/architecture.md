@@ -79,6 +79,10 @@ MapProvider.setCurrentLocationMarker() — 지도에 "현재 위치" 마커 갱�
 7. **[치명적]** `@capacitor-community/sqlite`의 Android 마이그레이션 `statements` 배열에 세미콜론으로 연결된 멀티스테이트먼트 문자열을 통째로 넣으면, 안드로이드의 `execSQL()`이 첫 문장만 실행하고 나머지를 조용히 버림 — `track_points`/`visits`/`photos`/`memos` 테이블이 기기에 한 번도 생성되지 않았던 원인. 배열 원소를 SQL 문 하나당 하나로 재작성하고, 기존에 손상된 기기를 복구하는 자가 치유 마이그레이션(`SCHEMA_V3`, `IF NOT EXISTS`로 안전)을 추가해 해결.
 8. `RouteDetailScreen`에서 지도(`MapProvider`)와 포인트 로딩이 서로 다른 시점에 준비되면 지도가 초기 기본 좌표에 머무르던 문제 — 둘 다 `useState`로 관리하고 `useEffect([map, points])`로 통합해 해결.
 
+**Phase 22** (자세히: [reports/22-duration-display-and-orphaned-routes.md](./reports/22-duration-display-and-orphaned-routes.md)):
+- "이동 시간"이 60분을 넘으면 "81:58"처럼 분:초로만 표시되어 "81시간"으로 오인되던 문제 — `formatDurationClock`이 1시간 이상이면 "H:MM:SS"로 표시하도록 수정.
+- 앱이 강제 종료되는 등으로 "추적 중지"를 거치지 못해 `ended_at`이 영구히 NULL로 남는 경로들을, 앱 시작 시 `recoverOrphanedRoutes()`가 실제 저장된 마지막 포인트 기준으로 자동 마감(이름/거리/시간 계산).
+
 **Phase 21** (자세히: [reports/21-chick-and-baby-puppy.md](./reports/21-chick-and-baby-puppy.md)):
 - 추적 중 현재 위치 아이콘을 병아리로 교체. 재생 마커를 머리 비율이 더 큰 "애기 강아지"로 조정. 추적 아이콘 관련 export 이름을 특정 캐릭터에 종속되지 않게(`trackingIconHtml/DataUri`, `TRACKING_ICON_SIZE/ANCHOR`) 리네임.
 

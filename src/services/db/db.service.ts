@@ -124,6 +124,12 @@ export async function updateRouteStats(routeId: number, distanceMeters: number, 
   ]);
 }
 
+/** Routes whose tracking was interrupted before "추적 중지" could run (app killed/crashed/swiped away) — `ended_at` was never set. */
+export async function listOrphanedRoutes(): Promise<Route[]> {
+  const res = await requireDb().query('SELECT * FROM routes WHERE ended_at IS NULL ORDER BY started_at ASC');
+  return (res.values ?? []).map(rowToRoute);
+}
+
 /** Deletes routes by id. Their track_points cascade-delete; any place_info tied to them keeps its row with route_id set to NULL. */
 export async function deleteRoutes(routeIds: number[]): Promise<void> {
   const database = requireDb();

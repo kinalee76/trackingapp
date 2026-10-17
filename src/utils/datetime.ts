@@ -20,10 +20,19 @@ export function formatDateTimeTitle(epochMs: number): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}_${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-/** "00:00" (MM:SS) — minutes are left unpadded past 2 digits (e.g. "125:07" for a 2h+ session) rather than rolling into an hours field. */
+/**
+ * "00:00" (MM:SS) under an hour, "1:21:58" (H:MM:SS) from an hour up —
+ * e.g. a 4918-second (81분 58초) walk used to render as "81:58", which reads
+ * like a bogus "81시간". Rolling over into an hours field once minutes hit
+ * 60 keeps it unambiguous. See docs/reports/22-duration-display-and-orphaned-routes.md.
+ */
 export function formatDurationClock(totalSeconds: number): string {
   const seconds = Math.max(0, Math.round(totalSeconds));
-  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
   const remainderSeconds = seconds % 60;
+  if (hours > 0) {
+    return `${hours}:${pad(minutes)}:${pad(remainderSeconds)}`;
+  }
   return `${pad(minutes)}:${pad(remainderSeconds)}`;
 }

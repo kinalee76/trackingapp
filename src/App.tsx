@@ -5,6 +5,7 @@ import { PlaceInfoTab } from './screens/PlaceInfoTab'
 import { SettingsScreen } from './screens/SettingsScreen'
 import { ErrorBoundary } from './ErrorBoundary'
 import * as db from './services/db/db.service'
+import { recoverOrphanedRoutes } from './services/geolocation/geolocation.service'
 
 type Tab = 'map' | 'records' | 'placeInfo' | 'settings'
 
@@ -23,8 +24,15 @@ function App() {
   // or writes the DB — initializing it once here, rather than per-screen,
   // means the map screen (the default tab, which has no other reason to
   // await initDb()) doesn't fail on first use.
+  //
+  // recoverOrphanedRoutes() runs right after, once per app launch, before
+  // the user can press "추적 시작" — see its own doc comment for why that
+  // ordering makes it safe to treat every still-open route as abandoned.
   useEffect(() => {
-    void db.initDb()
+    void (async () => {
+      await db.initDb()
+      await recoverOrphanedRoutes()
+    })()
   }, [])
 
   return (

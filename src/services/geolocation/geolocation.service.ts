@@ -123,6 +123,41 @@ export function openLocationSettings(): Promise<void> {
   return BackgroundGeolocation.openSettings();
 }
 
+/**
+ * Closes out any route left with `ended_at` still NULL — tracking that was
+ * interrupted (app killed/crashed/swiped away) before `stopTracking()` could
+ * run, so it never got a name, distance, or duration and would otherwise
+ * sit "open" forever (unreachable from the UI, since a fresh app launch
+ * always starts with `isTracking()` false). Closes each one using its last
+ * recorded track_point's timestamp as the end time and re-deriving distance
+ * from the actual recorded points, rather than leaving the record broken or
+ * guessing based on wall-clock "now".
+ *
+ * Must only be called once at app startup, before any new tracking session
+ * starts — at that point every `ended_at IS NULL` row is unambiguously
+ * abandoned, since this module's in-memory state (and therefore
+ * `isTracking()`) always starts fresh as "not tracking" on launch.
+ * See docs/reports/22-duration-display-and-orphaned-routes.md.
+ */
+export async function recoverOrphanedRoutes(): Promise<void> {
+  const orphaned = await db.listOrphanedRoutes();
+  for (const route of orphaned) {
+    const points = await db.getRoutePoints(route.id);
+    const lastPoint = points[points.length - 1];
+    const endedAt = lastPoint?.recordedAt ?? route.startedAt;
+    const durationSec = Math.max(0, Math.round((endedAt - route.startedAt) / 1000));
+
+    let distanceMeters = 0;
+    for (let i = 1; i < points.length; i++) {
+      distanceMeters += haversineMeters(points[i - 1], points[i]);
+    }
+
+    await db.endRoute(route.id, endedAt);
+    await db.setRouteName(route.id, formatDateTime(route.startedAt));
+    await db.updateRouteStats(route.id, distanceMeters, durationSec);
+  }
+}
+
 async function handleLocation(location: Location): Promise<void> {
   if (currentRouteId === null || !stayDetector) return;
 
