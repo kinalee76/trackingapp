@@ -184,11 +184,17 @@ export function MapScreen() {
           aria-label="현재 위치로 이동"
           title="현재 위치로 이동"
           style={{
+            WebkitAppearance: 'none',
+            appearance: 'none',
             position: 'absolute',
             right: 16,
             bottom: 16,
-            width: 48,
-            height: 48,
+            width: 24,
+            height: 24,
+            padding: 0,
+            margin: 0,
+            lineHeight: 0,
+            boxSizing: 'border-box',
             borderRadius: '50%',
             border: 'none',
             background: 'white',
@@ -199,9 +205,16 @@ export function MapScreen() {
             cursor: 'pointer',
           }}
         >
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="3" fill="#2563EB" />
-            <path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" />
+          {/* A cute smiling location pin instead of a plain crosshair. */}
+          <svg width="16" height="16" viewBox="0 0 24 24">
+            <path
+              d="M12 2C7.58 2 4 5.58 4 10c0 5.25 7 11.5 7.3 11.76a1 1 0 0 0 1.4 0C13 21.5 20 15.25 20 10c0-4.42-3.58-8-8-8z"
+              fill="#2563EB"
+            />
+            <circle cx="12" cy="10" r="5.2" fill="white" />
+            <circle cx="9.8" cy="9" r="1" fill="#2563EB" />
+            <circle cx="14.2" cy="9" r="1" fill="#2563EB" />
+            <path d="M9.3 11.5 Q12 13.5 14.7 11.5" stroke="#2563EB" strokeWidth="1.2" fill="none" strokeLinecap="round" />
           </svg>
         </button>
       </div>

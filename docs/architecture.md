@@ -80,6 +80,10 @@ MapProvider.setCurrentLocationMarker() — 지도에 "현재 위치" 마커 갱�
 7. **[치명적]** `@capacitor-community/sqlite`의 Android 마이그레이션 `statements` 배열에 세미콜론으로 연결된 멀티스테이트먼트 문자열을 통째로 넣으면, 안드로이드의 `execSQL()`이 첫 문장만 실행하고 나머지를 조용히 버림 — `track_points`/`visits`/`photos`/`memos` 테이블이 기기에 한 번도 생성되지 않았던 원인. 배열 원소를 SQL 문 하나당 하나로 재작성하고, 기존에 손상된 기기를 복구하는 자가 치유 마이그레이션(`SCHEMA_V3`, `IF NOT EXISTS`로 안전)을 추가해 해결.
 8. `RouteDetailScreen`에서 지도(`MapProvider`)와 포인트 로딩이 서로 다른 시점에 준비되면 지도가 초기 기본 좌표에 머무르던 문제 — 둘 다 `useState`로 관리하고 `useEffect([map, points])`로 통합해 해결.
 
+**Phase 26** (자세히: [reports/26-recenter-button-icon-refinement.md](./reports/26-recenter-button-icon-refinement.md)):
+- "현재 위치로 이동" 버튼 아이콘을 웃는 얼굴 위치 핀으로 교체, 크기 48px→24px로 축소.
+- **[버그]** Android WebView가 `<button>`에 적용하는 네이티브 외형(`-webkit-appearance`)을 끄지 않아 버튼이 타원형으로 렌더링되고 내부 SVG 아이콘이 전혀 보이지 않던 문제 — `WebkitAppearance: 'none'`, `appearance: 'none'`, `padding: 0` 등을 명시해 해결. 커스텀 아이콘 버튼을 추가할 때는 항상 네이티브 외형을 꺼야 함.
+
 **Phase 25** (자세히: [reports/25-recenter-button.md](./reports/25-recenter-button.md)):
 - 지도 화면 우측 하단에 "현재 위치로 이동" 버튼 추가. 추적 여부와 무관하게 항상 사용 가능.
 

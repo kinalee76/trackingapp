@@ -32,6 +32,7 @@
 | 23 | 기능 추가: 안드로이드 뒤로가기(백키) 동작 재정의 (상세→목록, 목록→지도, 지도→종료 확인) | 완료 (실기기 검증, 5개 시나리오) | [23-hardware-back-button.md](./23-hardware-back-button.md) |
 | 24 | 기능 추가: 장소 정보 목록에서 사진/위치 항목 아이콘 구분 | 완료 (실기기 검증) | [24-place-info-list-icons.md](./24-place-info-list-icons.md) |
 | 25 | 기능 추가: 지도에서 "현재 위치로 이동" 버튼 | 완료 (실기기 검증) | [25-recenter-button.md](./25-recenter-button.md) |
+| 26 | 개선: "현재 위치로 이동" 버튼 아이콘을 더 귀엽게 + 크기 50% 축소 (WebView 네이티브 버튼 외형 버그 수정 포함) | 완료 (실기기 검증) | [26-recenter-button-icon-refinement.md](./26-recenter-button-icon-refinement.md) |
 
 ## 알려진 미해결 이슈
 - 네이버 지도 인증이 간헐적으로 실패("네이버 지도 Open API 인증이 실패했습니다")하는 경우가 있음(같은 API 키로도 성공/실패가 오감). 원인 미확인(NCP 트래픽 제한/서비스 URL 제약/네트워크 추정). Phase 14 수정으로 이 상태에서도 앱이 크래시하지는 않지만, 지도 자체가 안 보이는 문제는 별개로 남아있음.
